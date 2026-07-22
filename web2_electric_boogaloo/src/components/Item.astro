@@ -1,0 +1,28 @@
+---
+import { Check } from "@lucide/astro";
+import { Image } from "astro:assets";
+interface Props {
+  name: string;
+  icon: ImageMetadata;
+}
+const { name, icon } = Astro.props;
+---
+
+<label
+  class="bg-secondary-background text-foreground border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none flex justify-between rounded-base items-center p-4"
+>
+  {
+    /* TODO: name is used by the onsubmit handler so should be a more accessible name to me */
+  }
+  <input class="peer sr-only" type="checkbox" name={name} />
+  <span class="flex flex-row items-center gap-2">
+    <Image alt="" src={icon} class="size-8 object-contain" />
+    <span class="font-sans text-sm text-gray-900">{name}</span>
+  </span>
+  <span
+    role="presentation"
+    class="bg-white size-4 border border-border peer-checked:hidden"></span>
+  <Check
+    class="text-main-foreground size-4 peer-checked:block hidden bg-main border-border border"
+  />
+</label>

@@ -1,4 +1,4 @@
-const toBase58Num = (n) => {
+export const toBase58Num = (n: number) => {
   let r = "",
     a = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
   do {
