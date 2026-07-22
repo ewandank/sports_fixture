@@ -23,15 +23,20 @@ import "../styles/global.css";
       const form = document.getElementById("calendar-form");
       form?.addEventListener("submit", (e) => {
         e.preventDefault();
-        const flags = [...form.querySelectorAll("input")].map(
-          (input) => input.checked,
-        );
-        let bitmask = 0;
-        for (const i in flags) {
-          if (flags[i]) bitmask |= 1 << i;
+        // I benchmarked this and it was faster then bitwise ops.
+        const bools = [...form.querySelectorAll("input")]
+          .map((input) => Number(input.checked))
+          .join("");
+
+        const bitMask = BigInt("0b" + bools);
+
+        if (bitMask === 0n) {
+          // TODO: not an alert
+          alert("you probably meant to select at least 1");
+          throw new Error("No options selected");
         }
-        console.log(toBase58Num(bitmask))
-        
+        console.log(toBase58Num(bitMask));
+        // TODO: open dialog here with the selected bitmask url to both copy and a href to go to the page.
       });
     </script>
     <div class="flex flex-col gap-3 p-2">
@@ -39,13 +44,13 @@ import "../styles/global.css";
       <p>Too much sport is barely enough.</p>
       <form class="flex flex-col gap-2.5" id="calendar-form">
         <!-- The order here MUST match the order on the backend as that is how the bitmask works -->
-        <Item name="Australian Women's Cricket" icon={caIcon} />
         <Item name="Australian Men's Cricket" icon={caIcon} />
-        <Item name="Melbourne Demons Men" icon={mfcIcon} />
-        <Item name="Melbourne Demons Women" icon={mfcIcon} />
+        <Item name="Australian Women's Cricket" icon={caIcon} />
         <Item name="Melbourne Stars Men" icon={starsIcon} />
         <Item name="Melbourne Stars Women" icon={starsIcon} />
-        <Item name="Melbourne United (Coming Soon)" icon={MUIcon} />
+        <Item name="Melbourne Demons Men" icon={mfcIcon} />
+        <Item name="Melbourne Demons Women" icon={mfcIcon} />
+        <Item name="Melbourne United" icon={MUIcon} />
 
         <Button type="submit">Get me a calendar!</Button>
       </form>

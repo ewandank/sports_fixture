@@ -6,12 +6,12 @@ app = FastAPI()
 
 # This can in theory expand indefinitely whilst keeping older ones compliant as the bits won't change. 
 class Options(IntFlag):
-    AUS_CRICKET_WOMEN = auto()
     AUS_CRICKET_MEN = auto()
-    DEMONS_AFLM = auto()
-    DEMONS_AFLW = auto()
+    AUS_CRICKET_WOMEN = auto()
     STARS_AFLM = auto()
     STARS_AFLW = auto()
+    DEMONS_AFLM = auto()
+    DEMONS_AFLW = auto()
     MELB_UNITED = auto()
 
 

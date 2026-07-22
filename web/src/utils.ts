@@ -1,9 +1,11 @@
-export const toBase58Num = (n: number) => {
-  let r = "",
-    a = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+export const toBase58Num = (n: bigint): string => {
+  // No ambigous l and I or 0 and O.
+  const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  let r = "";
   do {
-    r = a[n % 58] + r;
-    n = Math.floor(n / 58);
-  } while (n > 0);
+    r = ALPHABET[Number(n % 58n)] + r;
+    n /= 58n;
+  } while (n > 0n);
+
   return r;
 };
