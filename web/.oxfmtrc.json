@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": [],
+  "sortTailwindcss": true,
+  "sortImports": true,
+  "sortPackageJson": true
+}

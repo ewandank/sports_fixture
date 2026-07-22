@@ -1,12 +1,12 @@
-import { Button } from "./components/button";
-import { Item } from "./components/item";
 import caIcon from "./assets/ca.png";
 import mfcIcon from "./assets/mfc.png";
 import starsIcon from "./assets/stars.png";
+import { Button } from "./components/button";
+import { Item } from "./components/item";
 
 export function App() {
   return (
-    <div class="flex flex-col p-2 gap-3">
+    <div class="flex flex-col gap-3 p-2">
       <h1 class="text-4xl">Fixtures</h1>
       <p>Too much sport is barely enough.</p>
       <form

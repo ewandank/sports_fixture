@@ -1,18 +1,19 @@
-import { Checkbox } from "./checkbox";
+import { Check } from "lucide-preact";
 
-export const Item = (props: {
-  name: string;
-  icon: unknown;
-  selected: boolean;
-  disabled?: boolean;
-}) => {
+export const Item = (props: { name: string; icon: string }) => {
   return (
-    <div className=" flex-row rounded-base flex shadow-shadow border-2 gap-2 border-border bg-secondary-background text-foreground font-base items-center justify-between p-4">
-      <span className="flex flex-row items-center gap-2">
-        <img src={props.icon} class="size-8"/>
-        <label>{props.name}</label>
-      </span>
-      <Checkbox name={props.name}  disabled={props.disabled}/>
-    </div>
+    <label className="rounded-base shadow-shadow border-border bg-secondary-background text-foreground font-base flex flex-row items-center justify-between gap-2 border-2 p-4">
+      <input
+        type="checkbox"
+        className="peer sr-only"
+        // TODO this should be different so i can parse it back
+        name={props.name}
+      />
+      <div>
+        <img src={props.icon} className="size-8" />
+        <span className="font-sans text-sm text-gray-900">{props.name}</span>
+      </div>
+      <Check className="text-main-foreground size-4" />
+    </label>
   );
 };
