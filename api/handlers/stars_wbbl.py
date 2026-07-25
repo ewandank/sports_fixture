@@ -9,4 +9,4 @@ from utils.cricket import fetch_team_fixtures, get_competition_id
 async def get_fixture(client: AsyncCacheClient):
     team_id = 97
     competition_id = await get_competition_id(client, team_id, "WBBL")
-    return fetch_team_fixtures(client, team_id, competition_id)
+    return await fetch_team_fixtures(client, team_id, competition_id)

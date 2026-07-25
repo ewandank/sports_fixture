@@ -33,7 +33,7 @@ class CalendarResponse(Response):
     media_type = "text/calendar"
 
 
-@app.get("/v1/fixture", response_class=CalendarResponse)
+@app.get("/v1/fixture/{b58_mask}", response_class=CalendarResponse)
 async def v1_get_fixtures(
     b58_mask: str,
     client: Annotated[AsyncCacheClient, Depends(get_client)],
