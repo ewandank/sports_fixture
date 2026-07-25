@@ -1,8 +1,8 @@
 from contextlib import asynccontextmanager
+from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
-from hishel import AsyncSqliteStorage, BaseFilter, FilterPolicy
-from hishel import Response as HishelResponse
+from hishel import AsyncSqliteStorage
 from hishel.httpx import AsyncCacheClient
 from ics import Calendar
 from ics.event import Event
@@ -12,7 +12,6 @@ import handlers  # noqa: F401
 from enums import Teams
 from registry import registry
 from utils.base58 import from_base58_num
-
 
 
 @asynccontextmanager
@@ -36,7 +35,8 @@ class CalendarResponse(Response):
 
 @app.get("/v1/fixture", response_class=CalendarResponse)
 async def v1_get_fixtures(
-    b58_mask: str, client: AsyncCacheClient = Depends(get_client)
+    b58_mask: str,
+    client: Annotated[AsyncCacheClient, Depends(get_client)],
 ):
     try:
         requested_teams = Teams(from_base58_num(b58_mask))

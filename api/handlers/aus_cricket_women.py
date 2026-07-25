@@ -17,4 +17,4 @@ async def get_fixure(client: AsyncCacheClient):
         .raise_for_status()
         .json()
     )
-    return parse_fixture_response(raw_fixtures)
+    return parse_fixture_response(raw_fixtures, include_game_str=True)
