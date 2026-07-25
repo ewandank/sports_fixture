@@ -1,5 +1,11 @@
-const toBase58Num = n => {
-    let r = "", a = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-    do { r = a[n % 58] + r; n = Math.floor(n / 58); } while (n > 0);
-    return r;
+export const toBase58Num = (n: bigint): string => {
+  // No ambiguous l and I or 0 and O.
+  const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+  let r = "";
+  do {
+    r = ALPHABET[Number(n % 58n)] + r;
+    n /= 58n;
+  } while (n > 0n);
+
+  return r;
 };

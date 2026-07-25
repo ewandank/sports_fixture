@@ -1,0 +1,61 @@
+---
+import caIcon from "../assets/ca.png";
+import mfcIcon from "../assets/mfc.png";
+import starsIcon from "../assets/stars.png";
+import MUIcon from "../assets/melb-united.png";
+import Item from "../components/Item.astro";
+import Button from "../components/Button.astro";
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <script>
+      import { toBase58Num } from "../utils";
+      const form = document.getElementById("calendar-form");
+      form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // I benchmarked this and it was faster then bitwise ops.
+        const bools = [...form.querySelectorAll("input")]
+          .map((input) => Number(input.checked))
+          .join("");
+
+        const bitMask = BigInt("0b" + bools);
+
+        if (bitMask === 0n) {
+          // TODO: not an alert
+          alert("you probably meant to select at least 1");
+          throw new Error("No options selected");
+        }
+        console.log(toBase58Num(bitMask));
+        // TODO: open dialog here with the selected bitmask url to both copy and a href to go to the page.
+      });
+    </script>
+    <div class="flex flex-col gap-3 p-2">
+      <h1 class="text-4xl">TODO Name of the app goes here</h1>
+      <p>Because too much sport is barely enough.</p>
+      <form class="flex flex-col gap-2.5" id="calendar-form">
+        {
+          /*The order here MUST match the order on the backend as that is how the bitmask works*/
+        }
+        <Item name="Australian Men's Cricket" icon={caIcon} />
+        <Item name="Australian Women's Cricket" icon={caIcon} />
+        <Item name="Melbourne Stars Men" icon={starsIcon} />
+        <Item name="Melbourne Stars Women" icon={starsIcon} />
+        <Item name="Melbourne Demons Men" icon={mfcIcon} />
+        <Item name="Melbourne Demons Women" icon={mfcIcon} />
+        <Item name="Melbourne United" icon={MUIcon} />
+
+        <Button type="submit">Get me a calendar!</Button>
+      </form>
+    </div>
+  </body>
+</html>
