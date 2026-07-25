@@ -9,11 +9,12 @@ const { name, icon } = Astro.props;
 ---
 
 <label
-  class="bg-secondary-background text-foreground border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none flex justify-between rounded-base items-center p-4"
+  class="bg-secondary-background text-foreground border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY rounded-base flex items-center justify-between border-2 p-4 hover:shadow-none"
 >
   {
-    /* TODO: name is used by the onsubmit handler so should be a more accessible name to me */
-    // TODO: disabled state for currently unsupported ones.
+
+      /* TODO: name is used by the onsubmit handler so should be a more accessible name to me */
+      // TODO: disabled state for currently unsupported ones.
   }
   <input class="peer sr-only" type="checkbox" name={name} />
   <span class="flex flex-row items-center gap-2">
@@ -22,8 +23,9 @@ const { name, icon } = Astro.props;
   </span>
   <span
     role="presentation"
-    class="bg-transparent size-4 border border-border dark:border-white peer-checked:hidden"></span>
+    class="border-border size-4 border bg-transparent peer-checked:hidden dark:border-white"
+  ></span>
   <Check
-    class="text-main-foreground dark:text-white size-4 peer-checked:block hidden bg-main border-border dark:border-white border"
+    class="text-main-foreground bg-main border-border hidden size-4 border peer-checked:block dark:border-white dark:text-white"
   />
 </label>

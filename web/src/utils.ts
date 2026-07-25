@@ -1,5 +1,5 @@
 export const toBase58Num = (n: bigint): string => {
-  // No ambigous l and I or 0 and O.
+  // No ambiguous l and I or 0 and O.
   const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
   let r = "";
   do {
