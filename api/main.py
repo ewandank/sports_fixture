@@ -1,22 +1,39 @@
-from enum import IntFlag, auto
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+from fastapi import Depends, FastAPI, HTTPException, Request
+from hishel import AsyncSqliteStorage
+from hishel.httpx import AsyncCacheClient
+
+from enums import Teams
+from registry import registry
 from utils import from_base58_num
+# side effect imports are "magically"
+import handlers  # noqa: F401
 
-app = FastAPI()
+storage = AsyncSqliteStorage(connection="cache.sqlite", default_ttl=14400)
 
-# This can in theory expand indefinitely whilst keeping older ones compliant as the bits won't change. 
-class Options(IntFlag):
-    AUS_CRICKET_MEN = auto()
-    AUS_CRICKET_WOMEN = auto()
-    STARS_AFLM = auto()
-    STARS_AFLW = auto()
-    DEMONS_AFLM = auto()
-    DEMONS_AFLW = auto()
-    MELB_UNITED = auto()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.http_client = AsyncCacheClient(storage=storage)
+    yield
+    await app.state.http_client.aclose()
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+def get_client(request: Request) -> AsyncCacheClient:
+    return request.app.state.http_client
 
 
 @app.get("/v1/fixture/{fixture_base64_bitmask}")
-def get_fixtures(b58_mask):
-    foo = Options(from_base58_num(b58_mask))
-    print(f"{foo!r}")
-    return {"decoded":f"{foo!r}"}
+async def v1_get_fixtures(
+    b58_mask: str, client: AsyncCacheClient = Depends(get_client)
+):
+    try:
+        requested_teams = Teams(from_base58_num(b58_mask))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid calendar options")
+    calendar_items = await registry.get_combined_data(requested_teams, client)
+    return calendar_items

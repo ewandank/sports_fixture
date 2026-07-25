@@ -24,7 +24,8 @@ import "../styles/global.css";
       form?.addEventListener("submit", (e) => {
         e.preventDefault();
         // I benchmarked this and it was faster then bitwise ops.
-        const bools = [...form.querySelectorAll("input")]
+        // Reveresed so the last bit is the first option to match the bitmask order.
+        const bools = [...form.querySelectorAll("input")].toReversed()
           .map((input) => Number(input.checked))
           .join("");
 
