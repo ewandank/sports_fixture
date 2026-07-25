@@ -1,5 +1,5 @@
-import pkgutil
 import importlib
+import pkgutil
 
 # Automatically import all submodules in the current package directory
 for _, module_name, _ in pkgutil.walk_packages(__path__):
