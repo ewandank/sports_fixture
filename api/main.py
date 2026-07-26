@@ -52,6 +52,7 @@ async def v1_get_fixtures(
     c.events.update(calendar_items)
     return c.serialize()
 
+
 # Serve the web directory on the `/` route.
 # This is intentionally after the endpoint or it tries to serve a file,
 # rather then use the endpoint defined above.
