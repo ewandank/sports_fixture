@@ -23,4 +23,4 @@ RUN uv sync --frozen --no-cache --no-group dev
 
 EXPOSE 80
 # Run the application.
-CMD ["/api/.venv/bin/fastapi", "run", "api/main.py", "--port", "80", "--host", "0.0.0.0"]
+CMD ["/api/.venv/bin/fastapi", "run", "main.py", "--port", "80", "--host", "0.0.0.0"]
