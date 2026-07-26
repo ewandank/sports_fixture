@@ -1,12 +1,10 @@
-from ics.event import Event
 from hishel.httpx import AsyncCacheClient
 
 from enums import Teams
 from registry import register_option
-from utils.cricket import fetch_team_fixtures,
-
+from utils.cricket import fetch_team_fixtures
 
 
 @register_option(Teams.STARS_BBL)
 async def get_fixture(client: AsyncCacheClient):
-    return fetch_team_fixtures(client, team_id=108)
+    return await fetch_team_fixtures(client, team_id=108)

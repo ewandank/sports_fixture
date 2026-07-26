@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi.staticfiles import StaticFiles
 from hishel import AsyncSqliteStorage
 from hishel.httpx import AsyncCacheClient
 from ics import Calendar
@@ -22,7 +23,7 @@ async def lifespan(app: FastAPI):
     await app.state.http_client.aclose()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, docs_url=None)
 
 
 def get_client(request: Request) -> AsyncCacheClient:
@@ -33,7 +34,7 @@ class CalendarResponse(Response):
     media_type = "text/calendar"
 
 
-@app.get("/v1/fixture", response_class=CalendarResponse)
+@app.get("/v1/fixture/{b58_mask}", response_class=CalendarResponse)
 async def v1_get_fixtures(
     b58_mask: str,
     client: Annotated[AsyncCacheClient, Depends(get_client)],
@@ -50,3 +51,9 @@ async def v1_get_fixtures(
 
     c.events.update(calendar_items)
     return c.serialize()
+
+
+# Serve the web directory on the `/` route.
+# This is intentionally after the endpoint or it tries to serve a file,
+# rather then use the endpoint defined above.
+app.mount("/", StaticFiles(directory="../web/dist", html=True), name="web")
