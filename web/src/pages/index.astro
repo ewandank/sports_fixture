@@ -5,6 +5,8 @@ import starsIcon from "../assets/stars.png";
 import MUIcon from "../assets/melb-united.png";
 import Item from "../components/Item.astro";
 import Button from "../components/Button.astro";
+import LinkButton from "../components/LinkButton.astro";
+import { CopyIcon, CalendarPlusIcon, XIcon, CheckIcon } from "@lucide/astro";
 import "../styles/global.css";
 ---
 
@@ -24,8 +26,9 @@ import "../styles/global.css";
       form?.addEventListener("submit", (e) => {
         e.preventDefault();
         // I benchmarked this and it was faster then bitwise ops.
-        // Reveresed so the last bit is the first option to match the bitmask order.
-        const bools = [...form.querySelectorAll("input")].toReversed()
+        // Reversed so the last bit is the first option to match the bitmask order.
+        const bools = [...form.querySelectorAll("input")]
+          .toReversed()
           .map((input) => Number(input.checked))
           .join("");
 
@@ -36,8 +39,26 @@ import "../styles/global.css";
           alert("you probably meant to select at least 1");
           throw new Error("No options selected");
         }
-        console.log(toBase58Num(bitMask));
-        // TODO: open dialog here with the selected bitmask url to both copy and a href to go to the page.
+
+        const calendarUrl = `webcal://${window.location.host}/v1/fixture/${toBase58Num(bitMask)}`;
+
+        document.getElementById("calendar-url")!.innerText = calendarUrl;
+        (document.getElementById("add-button") as HTMLAnchorElement).href =
+          calendarUrl;
+
+        // This is not specific enough of a selector i think??
+        document.querySelector("dialog")?.showModal();
+
+        const copyButton = document.getElementById("copy-button");
+        copyButton?.addEventListener("click", async () => {
+          await navigator.clipboard.writeText(calendarUrl);
+          copyButton?.setAttribute("data-success", "true");
+
+          setTimeout(
+            () => copyButton?.setAttribute("data-success", "false"),
+            2000,
+          );
+        });
       });
     </script>
     <div class="flex flex-col gap-3 p-2">
@@ -57,6 +78,46 @@ import "../styles/global.css";
 
         <Button type="submit">Get me a calendar!</Button>
       </form>
+      {/*safari does not support closedby. it can be polyfilled */}
+      <dialog
+        id="my-dialog"
+        popover="auto"
+        class="bg-background text-foreground m-auto h-100 max-w-4/5 rounded-2xl transition-all backdrop:bg-black/50 backdrop:backdrop-blur-sm sm:h-50 sm:w-175"
+        closedby="any"
+      >
+        <div
+          class="flex h-full w-full flex-col items-center justify-between p-4"
+        >
+          {/*TODO I do not like this text */}
+          <h2 class="text-center text-3xl" autofocus tabindex="-1">
+            Here is your generated calendar URL
+          </h2>
+          <pre id="calendar-url" class="text-[2.7vw] sm:text-base"></pre>
+          <div class="flex w-full flex-col justify-center gap-4 lg:flex-row">
+            <LinkButton id="add-button">
+              <CalendarPlusIcon />Add to calendar</LinkButton
+            >
+            <Button id="copy-button" data-success="false">
+              <span
+                id="copy-text"
+                class="flex w-24 items-center justify-center gap-2 group-data-[success=true]:hidden"
+              >
+                <CopyIcon /> Copy URL
+              </span>
+
+              <span
+                id="copied-text"
+                class="hidden w-24 items-center justify-center gap-2 group-data-[success=true]:flex"
+              >
+                <CheckIcon /> Copied!
+              </span>
+            </Button>
+            <Button commandfor="my-dialog" command="close"
+              ><XIcon />Close</Button
+            >
+          </div>
+        </div>
+      </dialog>
     </div>
   </body>
 </html>
