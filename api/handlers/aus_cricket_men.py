@@ -7,4 +7,4 @@ from utils.cricket import fetch_team_fixtures
 
 @register_option(Teams.AUS_CRICKET_MEN)
 async def get_fixture(client: AsyncCacheClient):
-    return await fetch_team_fixtures(client, team_id=23)
+    return await fetch_team_fixtures(client, team_id=23,include_game_str=True)
