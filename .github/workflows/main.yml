@@ -44,10 +44,11 @@ jobs:
         with:
           node-version: 24.18.0
           cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm fmt:check
-      - run : pnpm astro check
+      - run: pnpm astro check
   docker-build:
     permissions:
       contents: read
